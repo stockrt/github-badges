@@ -33,13 +33,22 @@ GitHubBadge.loadUserInfo = function(data) {
       };
       return data.user.repositories.indexOf(repo2) - data.user.repositories.indexOf(repo1);
     })
+    var showFork = window.GITHUB_SHOW_FORK || 0;
+    var orderedReposLength = 0;
     $.each(orderedRepos, function(index) {
-      list.append(template, this);
+      if (showFork){
+        list.append(template, this);
+        orderedReposLength++;
+      }
+      else if (!this.fork){
+        list.append(template, this);
+        orderedReposLength++;
+      }
     });
     var showLimit = window.GITHUB_LIST_LENGTH || 10;
     
 		var showAllName = ("GITHUB_SHOW_ALL" in window && GITHUB_SHOW_ALL) || 'Show all';
-    var showMore = $("<div><a href='#' class='more'>" + showAllName + " (" + orderedRepos.length + ")</a></div>")
+    var showMore = $("<div><a href='#' class='more'>" + showAllName + " (" + orderedReposLength + ")</a></div>")
       .find('a')
       .click(function(event) { 
         $('#github-badge .body li').show(); 
